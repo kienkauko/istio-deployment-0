@@ -1,0 +1,118 @@
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: sp-server
+    service: sp-server
+  name: sp-server
+spec:
+  type: NodePort
+  ports: 
+  - port: 5000
+    targetPort: 5000
+    nodePort: 32160
+    protocol: TCP
+    name: http
+  selector: 
+    app: sp-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: sp-server
+    version: v1
+  name: sp-server-v1
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: sp-server
+      version: v1
+  template: 
+    metadata: 
+      labels: 
+        app: sp-server
+        version: v1
+    spec: 
+      containers:     
+      - name: sp-server
+        image: kienkauko/http:back1.1
+        ports: 
+        - containerPort: 80
+      nodeSelector:
+        kubernetes.io/hostname: node5
+---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata: 
+#   labels: 
+#     app: sp-server
+#     version: v2
+#   name: sp-server-v2
+# spec: 
+#   replicas: 1
+#   selector: 
+#     matchLabels: 
+#       app: sp-server
+#       version: v2
+#   template: 
+#     metadata: 
+#       labels: 
+#         app: sp-server
+#         version: v2
+#     spec: 
+#       containers:     
+#       - name: sp-server
+#         image: kienkauko/http:back1.1
+#         ports: 
+#         - containerPort: 80
+#       nodeSelector:
+#         kubernetes.io/hostname: node6
+---
+
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: sp-client
+    service: sp-client
+  name: sp-client
+spec:
+  type: NodePort
+  ports: 
+  - port: 5000
+    targetPort: 5000
+    nodePort: 32161
+    protocol: TCP
+    name: http
+  selector: 
+    app: sp-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: sp-client
+    version: v1
+  name: sp-client-v1
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: sp-client
+      version: v1
+  template: 
+    metadata: 
+      labels: 
+        app: sp-client
+        version: v1
+    spec: 
+      containers:     
+      - name: sp-client
+        image: kienkauko/http:front1.1
+        ports: 
+        - containerPort: 80
+      nodeSelector:
+        kubernetes.io/hostname: node6          

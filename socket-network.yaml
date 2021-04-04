@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: socket-route
+spec:
+  hosts: 
+  - sp-server
+  http:
+  - route:
+    - destination:
+        host: sp-server
+        port:
+          number: 5000 
+        subset: sp-server-v1
+    #   weight: 35
+    # - destination:
+    #     host: sp-server
+    #     port:
+    #       number: 5000
+    #     subset: sp-server-v2
+    #   weight: 65
+

@@ -1,0 +1,36 @@
+#### DESTINATION RULES ####
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: nginx2-dest
+spec:
+  host: nginx2
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+  subsets:
+  - name: nginx2-v1
+    labels: 
+      version: v1
+  - name: nginx2-v2
+    labels:
+      version: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: nginx1-dest
+spec:
+  host: nginx1
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_CONN
+  subsets:
+  - name: nginx1-v1
+    labels: 
+      version: v1
+  - name: nginx1-v2
+    labels:
+      version: v2    
+...

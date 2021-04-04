@@ -1,0 +1,148 @@
+# #### nginx1 ####
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: nginx1
+    service: nginx1
+  name: nginx1
+spec:
+  type: NodePort
+  ports: 
+  - port: 9080
+    targetPort: 80
+    nodePort: 32160
+    protocol: TCP
+    name: http
+  selector: 
+    app: nginx1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: nginx1
+    version: v1
+  name: nginx1-v1
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: nginx1
+      version: v1
+  template: 
+    metadata: 
+      labels: 
+        app: nginx1
+        version: v1
+    spec: 
+      containers:     
+      - name: nginx1
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+      nodeSelector:
+        kubernetes.io/hostname: node5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: nginx1
+    version: v2
+  name: nginx1-v2
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: nginx1
+      version: v2
+  template: 
+    metadata: 
+      labels: 
+        app: nginx1
+        version: v2
+    spec: 
+      containers:     
+      - name: nginx
+        image: nginx:1.14.2
+        ports: 
+        - containerPort: 80
+      nodeSelector:
+        kubernetes.io/hostname: node6
+...
+#### nginx2 ####
+---    
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: nginx2
+    service: nginx2
+  name: nginx2
+spec:
+  type: NodePort 
+  ports: 
+  - port: 9081
+    targetPort: 81
+    nodePort: 32161
+    protocol: TCP
+    name: http
+  selector: 
+    app: nginx2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: nginx2
+    version: v1
+  name: nginx2-v1
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: nginx2
+      version: v1
+  template: 
+    metadata: 
+      labels: 
+        app: nginx2
+        version: v1
+    spec: 
+      containers:     
+      - name: nginx2
+        image: nginx:1.14.2
+        ports: 
+        - containerPort: 81
+      nodeSelector:
+        kubernetes.io/hostname: node5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: nginx2
+    version: v2
+  name: nginx2-v2
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: nginx2
+      version: v2
+  template: 
+    metadata: 
+      labels: 
+        app: nginx2
+        version: v2
+    spec: 
+      containers:     
+      - name: nginx2
+        image: nginx:1.14.2
+        ports: 
+        - containerPort: 81
+      nodeSelector:
+        kubernetes.io/hostname: node6
+...
